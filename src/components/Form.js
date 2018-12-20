@@ -1,6 +1,7 @@
+import React from 'react';
+
 var blacklist = require('blacklist');
 var classnames = require('classnames');
-var React = require('react');
 
 module.exports = React.createClass({
 	displayName: 'Form',

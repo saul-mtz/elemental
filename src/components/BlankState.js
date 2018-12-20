@@ -1,21 +1,16 @@
-var React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
 
-module.exports = React.createClass({
-	displayName: 'BlankState',
-	propTypes: {
-		children: React.PropTypes.node.isRequired,
-	},
-	render () {
-		return <div className="BlankState" {...this.props} />;
-	},
-});
+const BlankState = (props) => <div className="BlankState" {...props} />;
 
-module.exports.Heading = React.createClass({
-	displayName: 'BlankStateHeading',
-	propTypes: {
-		children: React.PropTypes.node.isRequired,
-	},
-	render () {
-		return <h2 className="BlankState__heading" {...this.props} />;
-	},
-});
+BlankState.propTypes = {
+	children: PropTypes.node.isRequired,
+};
+
+export const Heading = (props) => <h2 className="BlankState__heading" {...props} />;
+
+Heading.propTypes = {
+	children: PropTypes.node.isRequired,
+};
+
+export default BlankState;

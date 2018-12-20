@@ -1,64 +1,44 @@
-const React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import Button from './Button';
+
 const Transition = require('react-addons-css-transition-group');
 const blacklist = require('blacklist');
 const classNames = require('classnames');
-const Button = require('./Button');
 
 const ESC_KEYCODE = 27;
 const NO_OP = () => undefined;
 
-module.exports = React.createClass({
-	displayName: 'Dropdown',
-	propTypes: {
-		alignRight: React.PropTypes.bool,
-		buttonHasDisclosureArrow: React.PropTypes.bool,
-		buttonLabel: React.PropTypes.string,
-		buttonType: React.PropTypes.string,
-		children: React.PropTypes.element,
-		className: React.PropTypes.string,
-		isOpen: React.PropTypes.bool,
-		items: React.PropTypes.array.isRequired,
-		onSelect: React.PropTypes.func,
-	},
-	getDefaultProps () {
-		return {
-			buttonHasDisclosureArrow: true,
-			onSelect: NO_OP,
-		};
-	},
-	getInitialState () {
-		return {
-			isOpen: this.props.isOpen || false,
-		};
-	},
-	componentWillUpdate (nextProps, nextState) {
-		if (typeof window === 'undefined') return;
-		if (nextState.isOpen) {
-			window.addEventListener('keydown', this.handleKeyDown);
-		} else {
-			window.removeEventListener('keydown', this.handleKeyDown);
-		}
-	},
-	openDropdown () {
+class Dropdown extends React.Component {
+	state = {
+		isOpen: this.props.isOpen || false,
+	};
+
+	openDropdown = () => {
 		this.setState({ isOpen: true });
-	},
-	closeDropdown () {
+	}
+
+	closeDropdown = () => {
 		this.setState({ isOpen: false });
-	},
-	handleKeyDown (e) {
+	}
+
+	handleKeyDown = (e) => {
 		if (e.keyCode === ESC_KEYCODE) {
 			this.closeDropdown();
 		}
-	},
-	renderChildren () {
+	}
+
+	renderChildren = () => {
 		return React.Children.map(this.props.children, (child) => {
 			return React.cloneElement(child, {
 				onClick: this.state.isOpen ? this.closeDropdown : this.openDropdown,
 				className: classNames(child.props.className, 'Dropdown-toggle'),
 			});
 		});
-	},
-	renderButton () {
+	}
+
+	renderButton = () => {
 		var disclosureArrow = this.props.buttonHasDisclosureArrow ? <span className="disclosure-arrow" /> : null;
 
 		return (
@@ -67,14 +47,16 @@ module.exports = React.createClass({
 				{disclosureArrow}
 			</Button>
 		);
-	},
-	onClick (selectedItem) {
+	}
+
+	onClick = (selectedItem) => {
 		this.setState({
 			isOpen: !this.state.isOpen,
 		});
 		this.props.onSelect(selectedItem);
-	},
-	renderDropdownMenu () {
+	}
+
+	renderDropdownMenu = () => {
 		var self = this;
 		if (!this.state.isOpen) return null;
 
@@ -99,11 +81,22 @@ module.exports = React.createClass({
 				{dropdownMenuItems}
 			</ul>
 		);
-	},
-	renderDropdownMenuBackground () {
+	}
+
+	renderDropdownMenuBackground = () => {
 		if (!this.state.isOpen) return null;
 		return <div className="Dropdown-menu-backdrop" onClick={this.closeDropdown} />;
-	},
+	}
+
+	componentWillUpdate (nextProps, nextState) {
+		if (typeof window === 'undefined') return;
+		if (nextState.isOpen) {
+			window.addEventListener('keydown', this.handleKeyDown);
+		} else {
+			window.removeEventListener('keydown', this.handleKeyDown);
+		}
+	}
+
 	render () {
 		// classes
 		var dropdownClass = classNames('Dropdown', {
@@ -123,5 +116,24 @@ module.exports = React.createClass({
 				{this.renderDropdownMenuBackground()}
 			</span>
 		);
-	},
-});
+	}
+}
+
+Dropdown.propTypes = {
+	alignRight: PropTypes.bool,
+	buttonHasDisclosureArrow: PropTypes.bool,
+	buttonLabel: PropTypes.string,
+	buttonType: PropTypes.string,
+	children: PropTypes.element,
+	className: PropTypes.string,
+	isOpen: PropTypes.bool,
+	items: PropTypes.array.isRequired,
+	onSelect: PropTypes.func,
+};
+
+Dropdown.defaultProps = {
+	buttonHasDisclosureArrow: true,
+	onSelect: NO_OP,
+};
+
+export default Dropdown;

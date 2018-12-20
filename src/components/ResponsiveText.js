@@ -1,6 +1,7 @@
 import React from 'react';
-import blacklist from 'blacklist';
 import E from '../constants';
+
+const blacklist = require('blacklist');
 
 module.exports = React.createClass({
 	displayName: 'ResponsiveText',

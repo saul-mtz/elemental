@@ -1,27 +1,23 @@
-/* global Prism */
-var classNames = require('classnames');
-var React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
 
-var ExampleSource = React.createClass({
-	propTypes: {
-		children: React.PropTypes.string.isRequired,
-		language: React.PropTypes.string
-	},
-	getDefaultProps () {
-		return {
-			language: 'markup'
-		};
-	},
+/* global Prism */
+const classNames = require('classnames');
+
+class ExampleSource extends React.Component {
 	componentDidMount () {
 		this.highlight();
-	},
+	}
+
 	componentDidUpdate () {
 		this.highlight();
-	},
-	highlight () {
+	}
+
+	highlight = () => {
 		Prism.highlightElement(this.refs.code, true);
-	},
-	fixIndentation (children) {
+	}
+
+	fixIndentation = (children) => {
 		if (typeof children !== 'string') return children;
 		var lines = children.split('\n').filter(l => l);
 		if (!lines.length) return children;
@@ -31,11 +27,13 @@ var ExampleSource = React.createClass({
 			lines = lines.map(s => s.substr(indent));
 		}
 		return lines.join('\n');
-	},
+	}
+
 	render () {
-		var codeClass = classNames('code-example__code', (
+		const codeClass = classNames('code-example__code', (
 			'language-' + this.props.language
 		));
+
 		return (
 			<pre className="code-example__pre">
 				<code ref="code" className={codeClass}>
@@ -44,6 +42,15 @@ var ExampleSource = React.createClass({
 			</pre>
 		);
 	}
-});
+}
 
-module.exports = ExampleSource;
+ExampleSource.propTypes = {
+	children: PropTypes.string.isRequired,
+	language: PropTypes.string
+};
+
+ExampleSource.defaultProps = {
+	language: 'markup'
+};
+
+export default ExampleSource;

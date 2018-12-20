@@ -1,36 +1,21 @@
-import classnames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-module.exports = React.createClass({
-	displayName: 'SegmentedControl',
+const classNames = require('classnames');
 
-	propTypes: {
-		className: React.PropTypes.string,
-		equalWidthSegments: React.PropTypes.bool,
-		onChange: React.PropTypes.func.isRequired,
-		options: React.PropTypes.array.isRequired,
-		type: React.PropTypes.oneOf(['default', 'muted', 'danger', 'info', 'primary', 'success', 'warning']),
-		value: React.PropTypes.string
-	},
-
-	getDefaultProps () {
-		return {
-			type: 'default'
-		};
-	},
-
-	onChange (value) {
+class SegmentedControl extends React.Component {
+	onChange = (value) => {
 		this.props.onChange(value);
-	},
+	}
 
 	render () {
-		let componentClassName = classnames('SegmentedControl', ('SegmentedControl--' + this.props.type), {
+		let componentClassName = classNames('SegmentedControl', ('SegmentedControl--' + this.props.type), {
 			'SegmentedControl--equal-widths': this.props.equalWidthSegments
 		}, this.props.className);
 
 		let options = this.props.options.map((op) => {
 
-			let buttonClassName = classnames('SegmentedControl__button', {
+			let buttonClassName = classNames('SegmentedControl__button', {
 				'is-selected': op.value === this.props.value
 			});
 
@@ -45,4 +30,20 @@ module.exports = React.createClass({
 
 		return <div className={componentClassName}>{options}</div>;
 	}
-});
+}
+
+SegmentedControl.propTypes = {
+	className: PropTypes.string,
+	equalWidthSegments: PropTypes.bool,
+	onChange: PropTypes.func.isRequired,
+	options: PropTypes.array.isRequired,
+	type: PropTypes.oneOf(['default', 'muted', 'danger', 'info', 'primary', 'success', 'warning']),
+	value: PropTypes.string
+};
+
+
+SegmentedControl.defaultProps = {
+	type: 'default'
+};
+
+export default SegmentedControl;

@@ -1,6 +1,7 @@
+import React from 'react';
+
 var blacklist = require('blacklist');
 var classNames = require('classnames');
-var React = require('react');
 
 var Radio = React.createClass({
 	propTypes: {

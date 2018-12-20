@@ -1,45 +1,29 @@
 import React from 'react';
-import blacklist from 'blacklist';
+import PropTypes from 'prop-types';
+
 import E from '../constants';
 
-module.exports = React.createClass({
-	displayName: 'Col',
-	propTypes: {
-		/* eslint-disable react/jsx-sort-prop-types */
-		basis: React.PropTypes.oneOfType([
-			React.PropTypes.number, // allow pixels
-			React.PropTypes.string, // allow percentage
-		]),
-		children: React.PropTypes.node,
-		gutter: React.PropTypes.number,
-		style: React.PropTypes.object,
-		lg: React.PropTypes.string, // width as a percentage or fraction
-		md: React.PropTypes.string, // width as a percentage or fraction
-		sm: React.PropTypes.string, // width as a percentage or fraction
-		xs: React.PropTypes.string, // width as a percentage or fraction
-		/* eslint-enable */
-	},
-	getDefaultProps () {
-		return {
-			gutter: E.width.gutter,
-		};
-	},
-	getInitialState: function() {
-		return {
-			windowWidth: (typeof window !== 'undefined') ? window.innerWidth : 0
-		};
-	},
-	componentDidMount: function() {
+const blacklist = require('blacklist');
+
+class Col extends React.Component {
+	state = {
+		windowWidth: typeof window !== 'undefined' ? window.innerWidth : 0
+	};
+
+	componentDidMount() {
 		if (typeof window !== 'undefined') window.addEventListener('resize', this.handleResize);
-	},
-	componentWillUnmount: function() {
+	}
+
+	componentWillUnmount() {
 		if (typeof window !== 'undefined') window.removeEventListener('resize', this.handleResize);
-	},
-	handleResize: function() {
+	}
+
+	handleResize = () => {
 		this.setState({
 			windowWidth: (typeof window !== 'undefined') ? window.innerWidth : 0
 		});
-	},
+	}
+	
 	render() {
 		let { basis, gutter, xs, sm, md, lg } = this.props;
 		let { windowWidth } = this.state;
@@ -83,5 +67,28 @@ module.exports = React.createClass({
 		let props = blacklist(this.props, 'basis', 'gutter', 'style', 'xs', 'sm', 'md', 'lg');
 
 		return <div style={Object.assign(columnStyle, this.props.style)} {...props} />;
-	},
-});
+	}
+}
+
+Col.propTypes = {
+	/* eslint-disable react/jsx-sort-prop-types */
+	basis: PropTypes.oneOfType([
+		PropTypes.number, // allow pixels
+		PropTypes.string, // allow percentage
+	]),
+	children: PropTypes.node,
+	gutter: PropTypes.number,
+	style: PropTypes.object,
+	lg: PropTypes.string, // width as a percentage or fraction
+	md: PropTypes.string, // width as a percentage or fraction
+	sm: PropTypes.string, // width as a percentage or fraction
+	xs: PropTypes.string, // width as a percentage or fraction
+	/* eslint-enable */
+};
+
+Col.defaultProps = {
+	gutter: E.width.gutter,
+};
+
+export default Col;
+	

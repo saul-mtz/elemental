@@ -1,34 +1,32 @@
-var React = require('react');
-var classNames = require('classnames');
+import React from 'react';
+import PropTypes from 'prop-types';
 
-var icons = require('../Octicons').map;
-var validNames = require('../Octicons').keys;
+const classNames = require('classnames');
+const icons = require('../Octicons').map;
+export const names = require('../Octicons').keys;
 
-var Glyph = React.createClass({
-	displayName: 'Glyph',
-	propTypes: {
-		className: React.PropTypes.string,
-		icon: React.PropTypes.oneOf(validNames),
-		type: React.PropTypes.oneOf([
-			'danger',
-			'default',
-			'muted',
-			'primary',
-			'success',
-			'warning',
-		]),
-	},
-	render () {
-		// classes
-		var className = classNames(
-			'Glyph__icon',
-			icons[this.props.icon].className,
-			(this.props.type ? 'IconField__icon-color--' + this.props.type : null),
-			this.props.className
-		);
-		return <i className={className} />;
-	},
-});
+const Glyph = (props) => {
+	// classes
+	const className = classNames(
+		'Glyph__icon',
+		icons[props.icon].className,
+		(props.type ? 'IconField__icon-color--' + props.type : null),
+		props.className
+	);
+	return <i className={className} />;
+};
 
-module.exports = Glyph;
-module.exports.names = validNames;
+Glyph.propTypes = {
+	className: PropTypes.string,
+	icon: PropTypes.oneOf(names),
+	type: PropTypes.oneOf([
+		'danger',
+		'default',
+		'muted',
+		'primary',
+		'success',
+		'warning',
+	]),
+};
+
+export default Glyph;

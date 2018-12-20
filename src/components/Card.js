@@ -1,15 +1,16 @@
-var React = require('react');
-var classNames = require('classnames');
+import React from 'react';
+import PropTypes from 'prop-types';
 
-module.exports = React.createClass({
-	displayName: 'Card',
-	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
-	},
-	render () {
-		var className = classNames('Card', this.props.className);
+const classNames = require('classnames');
 
-		return <div {...this.props} className={className} />;
-	},
-});
+const Card = (props) => {
+	const className = classNames('Card', props.className);
+	return <div {...props} className={className}/>;
+};
+
+Card.propTypes = {
+	children: PropTypes.node.isRequired,
+	className: PropTypes.string,
+};
+
+export default Card;

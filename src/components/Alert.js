@@ -1,7 +1,9 @@
-var React = require('react');
-var classNames = require('classnames');
+import React from 'react';
+import PropTypes from 'prop-types';
 
-var ALERT_TYPES = [
+const classNames = require('classnames');
+
+const ALERT_TYPES = [
 	'danger',
 	'error', // alias for danger
 	'info',
@@ -10,20 +12,20 @@ var ALERT_TYPES = [
 	'warning',
 ];
 
-module.exports = React.createClass({
-	displayName: 'ElementalAlert',
-	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
-		type: React.PropTypes.oneOf(ALERT_TYPES).isRequired,
-	},
-	render () {
-		var componentClass = classNames(
-			'Alert',
-			'Alert--' + this.props.type,
-			this.props.className
-		);
+const ElementalAlert = (props) => {
+	const componentClass = classNames(
+		'Alert',
+		'Alert--' + props.type,
+		props.className
+	);
 
-		return <div className={componentClass}>{this.props.children}</div>;
-	},
-});
+	return <div className={componentClass}>{props.children}</div>;
+};
+
+ElementalAlert.propTypes = {
+	children: PropTypes.element.isRequired,
+	className: PropTypes.string,
+	type: PropTypes.oneOf(ALERT_TYPES).isRequired,
+};
+
+export default ElementalAlert;

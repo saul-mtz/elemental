@@ -1,7 +1,8 @@
-import blacklist from 'blacklist';
-import classNames from 'classnames';
 import React from 'react';
 import icons from '../icons';
+
+const blacklist = require('blacklist');
+const classNames = require('classnames');
 
 module.exports = React.createClass({
 	displayName: 'FormSelect',

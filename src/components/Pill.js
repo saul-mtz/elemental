@@ -1,8 +1,10 @@
-var React = require('react');
-var blacklist = require('blacklist');
-var classNames = require('classnames');
+import React from 'react';
+import PropTypes from 'prop-types';
 
-var ALERT_TYPES = [
+const blacklist = require('blacklist');
+const classNames = require('classnames');
+
+const ALERT_TYPES = [
 	'danger',
 	'default',
 	'info',
@@ -17,24 +19,12 @@ var ALERT_TYPES = [
 	'warning-inverted'
 ];
 
-module.exports = React.createClass({
-	displayName: 'Pill',
-	propTypes: {
-		className: React.PropTypes.string,
-		label: React.PropTypes.string.isRequired,
-		onClear: React.PropTypes.func,
-		onClick: React.PropTypes.func,
-		type: React.PropTypes.oneOf(ALERT_TYPES)
-	},
-	getDefaultProps() {
-		return {
-			type: 'default'
-		};
-	},
-	renderClearButton() {
+class Pill extends React.Component {
+	renderClearButton = () => {
 		if (!this.props.onClear) return null;
 		return <button type="button" onClick={this.props.onClear} className="Pill__clear">&times;</button>;
-	},
+	}
+
 	render() {
 		var componentClass = classNames(
 			'Pill',
@@ -52,4 +42,18 @@ module.exports = React.createClass({
 			</div>
 		);
 	}
-});
+}
+
+Pill.propTypes = {
+	className: PropTypes.string,
+	label: PropTypes.string.isRequired,
+	onClear: PropTypes.func,
+	onClick: PropTypes.func,
+	type: PropTypes.oneOf(ALERT_TYPES)
+};
+
+Pill.defaultProps = {
+	type: 'default'
+};
+
+export default Pill;

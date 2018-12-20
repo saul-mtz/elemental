@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Transition from 'react-addons-css-transition-group';
-import blacklist from 'blacklist';
-import classNames from 'classnames';
 
 import { canUseDOM } from '../constants';
+
+const blacklist = require('blacklist');
+const classNames = require('classnames');
 
 const TransitionPortal = React.createClass({
 	displayName: 'TransitionPortal',

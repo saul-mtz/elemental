@@ -1,14 +1,16 @@
-var classnames = require('classnames');
-var React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
 
-module.exports = React.createClass({
-	displayName: 'ButtonGroup',
-	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
-	},
-	render () {
-		var className = classnames('ButtonGroup', this.props.className);
-		return <div {...this.props} className={className} />;
-	},
-});
+const classNames = require('classnames');
+
+const ButtonGroup = (props) => {
+	const className = classNames('ButtonGroup', props.className);
+	return <div {...props} className={className} />;
+};
+
+ButtonGroup.propTypes = {
+	children: PropTypes.node.isRequired,
+	className: PropTypes.string,
+};
+
+export default ButtonGroup;

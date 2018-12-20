@@ -1,6 +1,9 @@
 import React from 'react';
-import classnames from 'classnames';
+import PropTypes from 'prop-types';
+
 import E from '../../../src/constants';
+
+const classNames = require('classnames');
 
 const ALIGN_TRANSFORM = {
 	'center': 'center',
@@ -8,41 +11,39 @@ const ALIGN_TRANSFORM = {
 	'right': 'flex-end',
 };
 
-var DemoBox = React.createClass({
-	propTypes: {
-		align: React.PropTypes.oneOf(['center', 'left', 'right']),
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
-		inverted: React.PropTypes.bool,
-		style: React.PropTypes.object,
-	},
-	getDefaultProps () {
-		return {
-			align: 'center'
-		};
-	},
-	render () {
-		let boxStyle = {
-			backgroundColor: 'rgba(0,0,0,0.05)',
-			borderRadius: 4,
-			display: 'flex',
-			justifyContent: ALIGN_TRANSFORM[this.props.align],
-			msFlexPack: ALIGN_TRANSFORM[this.props.align],
-			WebkitJustifyContent: ALIGN_TRANSFORM[this.props.align],
-			marginBottom: E.width.gutter,
-			padding: '.66em 1.5em',
-		};
-		if (this.props.inverted) {
-			boxStyle.backgroundColor = E.color.appPrimary;
-		}
-		let className = classnames('DemoBox', this.props.className);
-
-		return (
-			<div style={Object.assign({}, boxStyle, this.props.style)} className={className}>
-				{ this.props.children }
-			</div>
-		);
+const DemoBox = (props) => {
+	let boxStyle = {
+		backgroundColor: 'rgba(0,0,0,0.05)',
+		borderRadius: 4,
+		display: 'flex',
+		justifyContent: ALIGN_TRANSFORM[props.align],
+		msFlexPack: ALIGN_TRANSFORM[props.align],
+		WebkitJustifyContent: ALIGN_TRANSFORM[props.align],
+		marginBottom: E.width.gutter,
+		padding: '.66em 1.5em',
+	};
+	if (props.inverted) {
+		boxStyle.backgroundColor = E.color.appPrimary;
 	}
-});
+	let className = classNames('DemoBox', props.className);
 
-module.exports = DemoBox;
+	return (
+		<div style={Object.assign({}, boxStyle, props.style)} className={className}>
+			{ props.children }
+		</div>
+	);
+};
+
+DemoBox.propTypes = {
+	align: PropTypes.oneOf(['center', 'left', 'right']),
+	children: PropTypes.node.isRequired,
+	className: PropTypes.string,
+	inverted: PropTypes.bool,
+	style: PropTypes.object,
+};
+
+DemoBox.defaultProps = {
+	align: 'center',
+};
+
+export default DemoBox;

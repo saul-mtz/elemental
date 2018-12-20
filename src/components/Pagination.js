@@ -1,18 +1,13 @@
-const React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
+
 const classNames = require('classnames');
 
-const Page = React.createClass({
-	displayName: 'Page',
-	propTypes: {
-		children: React.PropTypes.node,
-		label: React.PropTypes.string,
-		onSelect: React.PropTypes.func,
-		page: React.PropTypes.number,
-		selected: React.PropTypes.bool,
-	},
-	onSelect () {
+class Page extends React.Component {
+	onSelect = () => {
 		this.props.onSelect(this.props.page);
-	},
+	}
+
 	render () {
 		const { children, selected, label } = this.props;
 		const className = classNames('Pagination__list__item', {
@@ -23,23 +18,11 @@ const Page = React.createClass({
 				{children}
 			</button>
 		);
-	},
-});
+	}
+}
 
-module.exports = React.createClass({
-	displayName: 'Pagination',
-	propTypes: {
-		className: React.PropTypes.string,
-		currentPage: React.PropTypes.number.isRequired,
-		limit: React.PropTypes.number,
-		onPageSelect: React.PropTypes.func,
-		pageSize: React.PropTypes.number.isRequired,
-		plural: React.PropTypes.string,
-		singular: React.PropTypes.string,
-		style: React.PropTypes.object,
-		total: React.PropTypes.number.isRequired,
-	},
-	renderCount () {
+class Pagination extends React.Component {
+	renderCount = () => {
 		let count = '';
 		let { currentPage, pageSize, plural, singular, total } = this.props;
 		if (!total) {
@@ -59,13 +42,15 @@ module.exports = React.createClass({
 		return (
 			<div className="Pagination__count">{count}</div>
 		);
-	},
-	onPageSelect (page) {
+	}
+
+	onPageSelect = (page) => {
 		if (this.props.onPageSelect) {
 			this.props.onPageSelect(page);
 		}
-	},
-	renderPages () {
+	}
+
+	renderPages = () => {
 		if (this.props.total <= this.props.pageSize) return null;
 
 		let pages = [];
@@ -106,7 +91,8 @@ module.exports = React.createClass({
 				{pages}
 			</div>
 		);
-	},
+	}
+
 	render () {
 		var className = classNames('Pagination', this.props.className);
 		return (
@@ -116,4 +102,27 @@ module.exports = React.createClass({
 			</div>
 		);
 	}
-});
+}
+
+Page.propTypes = {
+	children: PropTypes.node,
+	label: PropTypes.string,
+	onSelect: PropTypes.func,
+	page: PropTypes.number,
+	selected: PropTypes.bool,
+};
+
+Pagination.propTypes = {
+	className: PropTypes.string,
+	currentPage: PropTypes.number.isRequired,
+	limit: PropTypes.number,
+	onPageSelect: PropTypes.func,
+	pageSize: PropTypes.number.isRequired,
+	plural: PropTypes.string,
+	singular: PropTypes.string,
+	style: PropTypes.object,
+	total: PropTypes.number.isRequired,
+};
+
+
+export default Pagination;

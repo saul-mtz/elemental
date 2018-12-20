@@ -1,42 +1,23 @@
-var React = require('react');
-var blacklist = require('blacklist');
-var classNames = require('classnames');
+import React from 'react';
+import PropTypes from 'prop-types';
 
-module.exports = React.createClass({
-	displayName: 'FormInput',
-	propTypes: {
-		autoFocus: React.PropTypes.bool,
-		className: React.PropTypes.string,
-		disabled: React.PropTypes.bool,
-		href: React.PropTypes.string,
-		id: React.PropTypes.string,
-		multiline: React.PropTypes.bool,
-		name: React.PropTypes.string,
-		noedit: React.PropTypes.bool,
-		onChange: React.PropTypes.func,
-		size: React.PropTypes.oneOf(['lg', 'sm', 'xs']),
-		type: React.PropTypes.string,
-		value: React.PropTypes.oneOfType([
-			React.PropTypes.number,
-			React.PropTypes.string,
-		]),
-	},
+const classNames = require('classnames');
 
-	getDefaultProps() {
-		return {
-			type: 'text',
-		};
-	},
-
+class FormInput extends React.Component {
+	constructor(props) {
+		super(props);
+		this.focus = this.focus.bind(this);
+	}
+	
 	componentDidMount () {
 		if (this.props.autoFocus) {
 			this.focus();
 		}
-	},
+	}
 
 	focus() {
 		this.refs.input.focus();
-	},
+	}
 
 	render() {
 		const { noedit, multiline, size, className, ...rest } = this.props;
@@ -50,7 +31,7 @@ module.exports = React.createClass({
 			(size ? ('FormInput--' + size) : null),
 			className
 		);
-		let props = { ...rest, className: newClassName, ref: 'input' };
+		const props = { ...rest, className: newClassName, ref: 'input' };
 		let Element = 'input';
 		if (noedit && this.props.href) {
 			Element = 'a';
@@ -65,5 +46,29 @@ module.exports = React.createClass({
 		}
 
 		return <Element {...props} />;
-	},
-});
+	}
+}
+
+FormInput.propTypes = {
+	autoFocus: PropTypes.bool,
+	className: PropTypes.string,
+	disabled: PropTypes.bool,
+	href: PropTypes.string,
+	id: PropTypes.string,
+	multiline: PropTypes.bool,
+	name: PropTypes.string,
+	noedit: PropTypes.bool,
+	onChange: PropTypes.func,
+	size: PropTypes.oneOf(['lg', 'sm', 'xs']),
+	type: PropTypes.string,
+	value: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.string,
+	]),
+};
+
+FormInput.defaultProps ={
+	type: 'text',
+};
+
+export default FormInput;

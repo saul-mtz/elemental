@@ -1,5 +1,12 @@
 # Elemental
 
+## v0.6.2 / 2018
+- react16
+- babel7
+- components library using nwb
+
+TODO: remove blacklist module
+
 ## v0.6.1 / 2016-08-04
 
 * fixed; issue passing unrecognised attributes to DOM elements that was missed in 0.6.0
