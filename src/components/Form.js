@@ -1,29 +1,30 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var blacklist = require('blacklist');
-var classnames = require('classnames');
+const classNames = require('classnames');
 
-module.exports = React.createClass({
-	displayName: 'Form',
-	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string,
-		component: React.PropTypes.oneOfType([
-			React.PropTypes.element,
-			React.PropTypes.string
-		]),
-		type: React.PropTypes.oneOf(['basic', 'horizontal', 'inline'])
-	},
-	getDefaultProps () {
-		return {
-			component: 'form',
-			type: 'basic'
-		};
-	},
-	render () {
-		var props = blacklist(this.props, 'children', 'type', 'component');
-		props.className = classnames('Form', ('Form--' + this.props.type), this.props.className);
+const blacklist = require('blacklist');
 
-		return React.createElement(this.props.component, props, this.props.children);
-	},
-});
+const Form = (props) => {
+	const componentProps = blacklist(props, 'children', 'type', 'component');
+	componentProps.className = classNames('Form', ('Form--' + props.type), props.className);
+
+	return React.createElement(props.component, componentProps, props.children);
+};
+
+Form.propTypes = {
+	children: PropTypes.node.isRequired,
+	className: PropTypes.string,
+	component: PropTypes.oneOfType([
+		PropTypes.element,
+		PropTypes.string
+	]),
+	type: PropTypes.oneOf(['basic', 'horizontal', 'inline'])
+};
+
+Form.defaultProps = {
+	component: 'form',
+	type: 'basic'
+};
+
+export default Form;

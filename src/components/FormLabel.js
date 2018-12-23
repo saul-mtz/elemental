@@ -1,44 +1,47 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var blacklist = require('blacklist');
-var classNames = require('classnames');
+const classNames = require('classnames');
 
-module.exports = React.createClass({
-	displayName: 'FormLabel',
-	propTypes: {
-		className: React.PropTypes.string,
-		htmlFor: React.PropTypes.string,
-		id: React.PropTypes.string,
-		style: React.PropTypes.object,
-		verticalAlign: React.PropTypes.oneOf([
-			'baseline',
-			'bottom',
-			'inherit',
-			'initial',
-			'middle',
-			'sub',
-			'super',
-			'text-bottom',
-			'text-top',
-			'top',
-		]),
-	},
-	render () {
-		// classes
-		var className = classNames('FormLabel', this.props.className);
-		// props
-		var props = blacklist(this.props, 'htmlFor', 'id', 'className', 'style');
-		// style
-		var style;
-		if (this.props.verticalAlign) {
-			style = {
-				verticalAlign: this.props.verticalAlign,
-			};
-		}
-		return (
-			<label className={className} htmlFor={this.props.htmlFor || this.props.id} style={style || this.props.style} {...props}>
-				{this.props.children}
-			</label>
-		);
+const blacklist = require('blacklist');
+
+const FormLabel = (props) => {
+	// classes
+	const className = classNames('FormLabel', props.className);
+	// props
+	const componentProps = blacklist(props, 'htmlFor', 'id', 'className', 'style');
+	// style
+	let style;
+	if (props.verticalAlign) {
+		style = {
+			verticalAlign: props.verticalAlign,
+		};
 	}
-});
+
+	return (
+		<label className={className} htmlFor={props.htmlFor || props.id} style={style || props.style} {...componentProps}>
+			{props.children}
+		</label>
+	);
+};
+
+FormLabel.propTypes = {
+	className: PropTypes.string,
+	htmlFor: PropTypes.string,
+	id: PropTypes.string,
+	style: PropTypes.object,
+	verticalAlign: PropTypes.oneOf([
+		'baseline',
+		'bottom',
+		'inherit',
+		'initial',
+		'middle',
+		'sub',
+		'super',
+		'text-bottom',
+		'text-top',
+		'top',
+	]),
+};
+
+export default FormLabel;

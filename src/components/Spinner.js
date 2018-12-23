@@ -1,34 +1,34 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var classNames = require('classnames');
+const classNames = require('classnames');
 
-module.exports = React.createClass({
-	displayName: 'Spinner',
-	propTypes: {
-		className: React.PropTypes.string,
-		size: React.PropTypes.oneOf(['sm', 'md', 'lg']),
-		type: React.PropTypes.oneOf(['default', 'primary', 'inverted'])
-	},
-	getDefaultProps() {
-		return {
-			type: 'default',
-			size: 'sm'
-		};
-	},
-	render() {
-		var componentClass = classNames(
-			'Spinner',
-			'Spinner--' + this.props.type,
-			'Spinner--' + this.props.size,
-			this.props.className
-		);
+const Spinner = (props) => {
+	const componentClass = classNames(
+		'Spinner',
+		'Spinner--' + props.type,
+		'Spinner--' + props.size,
+		props.className
+	);
 
-		return (
-			<div className={componentClass}>
-				<span className="Spinner_dot Spinner_dot--first" />
-				<span className="Spinner_dot Spinner_dot--second" />
-				<span className="Spinner_dot Spinner_dot--third" />
-			</div>
-		);
-	}
-});
+	return (
+		<div className={componentClass}>
+			<span className="Spinner_dot Spinner_dot--first" />
+			<span className="Spinner_dot Spinner_dot--second" />
+			<span className="Spinner_dot Spinner_dot--third" />
+		</div>
+	);
+};
+
+Spinner.propTypes = {
+	className: PropTypes.string,
+	size: PropTypes.oneOf(['sm', 'md', 'lg']),
+	type: PropTypes.oneOf(['default', 'primary', 'inverted'])
+};
+
+Spinner.defaultProps = {
+	type: 'default',
+	size: 'sm'
+};
+
+export default Spinner;

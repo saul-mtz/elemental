@@ -1,55 +1,57 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var blacklist = require('blacklist');
-var classNames = require('classnames');
+const classNames = require('classnames');
 
-module.exports = React.createClass({
-	displayName: 'FormField',
-	propTypes: {
-		className: React.PropTypes.string,
-		htmlFor: React.PropTypes.string,
-		id: React.PropTypes.string,
-		label: React.PropTypes.string,
-		offsetAbsentLabel: React.PropTypes.bool,
-		width: React.PropTypes.oneOf([
-			'one-half',
-			'two-quarters',
-			'three-sixths',
-			'one-quarter',
-			'three-quarters',
-			'one-third',
-			'two-sixths',
-			'two-thirds',
-			'four-sixths',
-			'one-fifth',
-			'two-fifths',
-			'three-fifths',
-			'four-fifths',
-			'one-sixth',
-			'five-sixths',
-		]),
-	},
-	render () {
-		// classes
-		var componentClass = classNames('FormField', {
-			'offset-absent-label': this.props.offsetAbsentLabel
-		}, this.props.width, this.props.className);
+const blacklist = require('blacklist');
 
-		// props
-		var props = blacklist(this.props, 'className', 'label', 'offsetAbsentLabel', 'width');
+const FormField = (props) => {
+	// classes
+	const componentClass = classNames('FormField', {
+		'offset-absent-label': props.offsetAbsentLabel
+	}, props.width, props.className);
 
-		// elements
-		var componentLabel = this.props.label ? (
-			<label className="FormLabel" htmlFor={this.props.id || this.props.htmlFor}>
-				{this.props.label}
-			</label>
-		) : null;
+	// props
+	var componentProps = blacklist(props, 'className', 'label', 'offsetAbsentLabel', 'width');
 
-		return (
-			<div className={componentClass} {...props}>
-				{componentLabel}
-				{this.props.children}
-			</div>
-		);
-	},
-});
+	// elements
+	var componentLabel = props.label ? (
+		<label className="FormLabel" htmlFor={props.id || props.htmlFor}>
+			{props.label}
+		</label>
+	) : null;
+
+	return (
+		<div className={componentClass} {...componentProps}>
+			{componentLabel}
+			{props.children}
+		</div>
+	);
+};
+
+FormField.propTypes = {
+	className: PropTypes.string,
+	htmlFor: PropTypes.string,
+	id: PropTypes.string,
+	label: PropTypes.string,
+	offsetAbsentLabel: PropTypes.bool,
+	width: PropTypes.oneOf([
+		'one-half',
+		'two-quarters',
+		'three-sixths',
+		'one-quarter',
+		'three-quarters',
+		'one-third',
+		'two-sixths',
+		'two-thirds',
+		'four-sixths',
+		'one-fifth',
+		'two-fifths',
+		'three-fifths',
+		'four-fifths',
+		'one-sixth',
+		'five-sixths',
+	]),
+};
+
+export default FormField;

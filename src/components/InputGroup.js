@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import InputGroupSection from './InputGroupSection';
+
 const classNames = require('classnames');
 const blacklist = require('blacklist');
 
@@ -22,5 +24,7 @@ InputGroup.propTypes= {
 	contiguous: PropTypes.bool
 };
 
-export Section from './InputGroupSection';
+
+InputGroup.Section = InputGroupSection;
+
 export default InputGroup;

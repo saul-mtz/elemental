@@ -1,36 +1,29 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import E from '../constants';
 
 const blacklist = require('blacklist');
 
-module.exports = React.createClass({
-	displayName: 'ResponsiveText',
-	propTypes: {
-		hiddenLG: React.PropTypes.string,
-		hiddenMD: React.PropTypes.string,
-		hiddenSM: React.PropTypes.string,
-		hiddenXS: React.PropTypes.string,
-		visibleLG: React.PropTypes.string,
-		visibleMD: React.PropTypes.string,
-		visibleSM: React.PropTypes.string,
-		visibleXS: React.PropTypes.string,
-	},
-	getInitialState: function() {
-		return {
-			windowWidth: (typeof window !== 'undefined') ? window.innerWidth : 0
-		};
-	},
-	componentDidMount: function() {
-		if (typeof window !== 'undefined') window.addEventListener('resize', this.handleResize);
-	},
-	componentWillUnmount: function() {
-		if (typeof window !== 'undefined') window.removeEventListener('resize', this.handleResize);
-	},
-	handleResize: function() {
+class ResponsiveText extends React.Component {
+	state = {
+		windowWidth: (typeof window !== 'undefined') ? window.innerWidth : 0
+	};
+
+	handleResize = () => {
 		this.setState({
 			windowWidth: (typeof window !== 'undefined') ? window.innerWidth : 0
 		});
-	},
+	}
+
+	componentDidMount() {
+		if (typeof window !== 'undefined') window.addEventListener('resize', this.handleResize);
+	}
+
+	componentWillUnmount() {
+		if (typeof window !== 'undefined') window.removeEventListener('resize', this.handleResize);
+	}
+
 	render() {
 		let { hiddenXS, hiddenSM, hiddenMD, hiddenLG, visibleXS, visibleSM, visibleMD, visibleLG } = this.props;
 		let { windowWidth } = this.state;
@@ -61,4 +54,17 @@ module.exports = React.createClass({
 
 		return <span {...props}>{text}</span>;
 	}
-});
+}
+
+ResponsiveText.propTypes = {
+	hiddenLG: PropTypes.string,
+	hiddenMD: PropTypes.string,
+	hiddenSM: PropTypes.string,
+	hiddenXS: PropTypes.string,
+	visibleLG: PropTypes.string,
+	visibleMD: PropTypes.string,
+	visibleSM: PropTypes.string,
+	visibleXS: PropTypes.string,
+};
+
+export default ResponsiveText;

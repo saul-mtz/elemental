@@ -1,28 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var classnames = require('classnames');
-var blacklist = require('blacklist');
+const classNames = require('classnames');
+const blacklist = require('blacklist');
 
-module.exports = React.createClass({
-	displayName: 'ModalHeader',
-	propTypes: {
-		children: React.PropTypes.node,
-		className: React.PropTypes.string,
-		onClose: React.PropTypes.func,
-		showCloseButton: React.PropTypes.bool,
-		text: React.PropTypes.string
-	},
-	handleClose () {
+class ModalHeader extends React.Component {
+	handleClose = () => {
 		document.body.style.overflow = null;
 		this.props.onClose();
-	},
-	render() {
+	}
 
+	render() {
 		// elements
-		var className = classnames('Modal__header', this.props.className);
-		var close = this.props.showCloseButton ? <button type="button" onClick={this.handleClose} className="Modal__header__close" /> : null;
-		var text = this.props.text ? <h4 className="Modal__header__text">{this.props.text}</h4> : null;
-		var props = blacklist(this.props, 'children', 'onClose', 'showCloseButton', 'text');
+		const className = classNames('Modal__header', this.props.className);
+		const close = this.props.showCloseButton ? <button type="button" onClick={this.handleClose} className="Modal__header__close" /> : null;
+		const text = this.props.text ? <h4 className="Modal__header__text">{this.props.text}</h4> : null;
+		const props = blacklist(this.props, 'children', 'onClose', 'showCloseButton', 'text');
 
 		return (
 			<div {...props} className={className}>
@@ -32,4 +25,14 @@ module.exports = React.createClass({
 			</div>
 		);
 	}
-});
+}
+
+ModalHeader.propTypes =  {
+	children: PropTypes.node,
+	className: PropTypes.string,
+	onClose: PropTypes.func,
+	showCloseButton: PropTypes.bool,
+	text: PropTypes.string
+};
+	
+export default ModalHeader;

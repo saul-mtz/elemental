@@ -1,62 +1,58 @@
-const React = require('react');
-const blacklist = require('blacklist');
-const classNames = require('classnames');
+import React from 'react';
+import PropTypes from 'prop-types';
+import FormField from './FormField';
+import Spinner from './Spinner';
 
-const FormField = require('./FormField');
-const Spinner = require('./Spinner');
+const classNames = require('classnames');
+const blacklist = require('blacklist');
 
 const ICON_MAP = require('../Octicons').map;
 const ICON_KEYS = require('../Octicons').keys;
 const COLOR_VARIANTS = ['danger', 'default', 'primary', 'success', 'warning'];
 
-module.exports = React.createClass({
-	displayName: 'FormIconField',
-	propTypes: {
-		className: React.PropTypes.string,
-		iconColor: React.PropTypes.oneOf(COLOR_VARIANTS),
-		iconFill: React.PropTypes.oneOf(COLOR_VARIANTS),
-		iconIsLoading: React.PropTypes.bool,
-		iconKey: React.PropTypes.oneOf(ICON_KEYS).isRequired,
-		iconPosition: React.PropTypes.oneOf(['left', 'right']),
-	},
-	getDefaultProps() {
-		return {
-			iconPosition: 'left',
-		};
-	},
-	render() {
-		// props
-		var props = blacklist(this.props, 'children', 'iconPosition', 'iconKey', 'iconFill', 'iconColor', 'iconIsLoading');
+const FormIconField = (props) => {
+	// props
+	const componentProps = blacklist(props, 'children', 'iconPosition', 'iconKey', 'iconFill', 'iconColor', 'iconIsLoading');
 
-		// classes
-		var fieldClass = classNames('IconField', {
-				'has-fill-icon': this.props.iconFill,
-				'is-loading-icon': this.props.iconIsLoading
-			},
-			(this.props.iconFill ? ('field-context-' + this.props.iconFill) : null),
-			(this.props.iconColor ? ('field-context-' + this.props.iconColor) : null),
-			this.props.iconPosition);
+	// classes
+	const fieldClass = classNames('IconField', {
+			'has-fill-icon': props.iconFill,
+			'is-loading-icon': props.iconIsLoading
+		},
+		(props.iconFill ? ('field-context-' + props.iconFill) : null),
+		(props.iconColor ? ('field-context-' + props.iconColor) : null),
+		props.iconPosition);
 
-		var iconClass = classNames(
-			'IconField__icon',
-			(this.props.iconFill ? 'IconField__icon-fill--' + this.props.iconFill : null),
-			(this.props.iconColor ? 'IconField__icon-color--' + this.props.iconColor : null),
-			ICON_MAP[this.props.iconKey].className
-		);
+	const iconClass = classNames(
+		'IconField__icon',
+		(props.iconFill ? 'IconField__icon-fill--' + props.iconFill : null),
+		(props.iconColor ? 'IconField__icon-color--' + props.iconColor : null),
+		ICON_MAP[props.iconKey].className
+	);
 
-		var icon = this.props.iconIsLoading ? (
-			<Spinner size="sm" />
-		) : (
-			<span className={iconClass} />
-		);
+	const icon = props.iconIsLoading ? <Spinner size="sm" /> : <span className={iconClass} />;
 
-		return (
-			<FormField {...props}>
-				<div className={fieldClass}>
-					{this.props.children}
-					{icon}
-				</div>
-			</FormField>
-		);
-	},
-});
+	return (
+		<FormField {...componentProps}>
+			<div className={fieldClass}>
+				{props.children}
+				{icon}
+			</div>
+		</FormField>
+	);
+};
+
+FormIconField.propTypes = {
+	className: PropTypes.string,
+	iconColor: PropTypes.oneOf(COLOR_VARIANTS),
+	iconFill: PropTypes.oneOf(COLOR_VARIANTS),
+	iconIsLoading: PropTypes.bool,
+	iconKey: PropTypes.oneOf(ICON_KEYS).isRequired,
+	iconPosition: PropTypes.oneOf(['left', 'right']),
+};
+
+FormIconField.defaultProps = {
+	iconPosition: 'left',
+};
+
+export default FormIconField;

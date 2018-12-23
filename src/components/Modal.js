@@ -1,52 +1,46 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import ReactDOM from 'react-dom';
 import Transition from 'react-addons-css-transition-group';
 
 import { canUseDOM } from '../constants';
 
+import ModalBody from './ModalBody';
+import ModalFooter from './ModalFooter';
+import ModalHeader from './ModalHeader';
+
 const blacklist = require('blacklist');
 const classNames = require('classnames');
 
-const TransitionPortal = React.createClass({
-	displayName: 'TransitionPortal',
+class TransitionPortal extends React.Component {
+	portalElement = null;
+
 	componentDidMount() {
 		if (!canUseDOM) return;
 		let p = document.createElement('div');
 		document.body.appendChild(p);
 		this.portalElement = p;
 		this.componentDidUpdate();
-	},
+	}
+
 	componentDidUpdate() {
 		if (!canUseDOM) return;
 		ReactDOM.render(<Transition {...this.props}>{this.props.children}</Transition>, this.portalElement);
-	},
+	}
+
 	componentWillUnmount() {
 		if (!canUseDOM) return;
 		document.body.removeChild(this.portalElement);
-	},
-	portalElement: null,
-	render: () => null,
-});
+	}
+	
+	render() {
+		return null
+	}
+}
 
-module.exports = React.createClass({
-	displayName: 'Modal',
-	propTypes: {
-		autoFocusFirstElement: React.PropTypes.bool,
-		backdropClosesModal: React.PropTypes.bool,
-		className: React.PropTypes.string,
-		isOpen: React.PropTypes.bool,
-		onCancel: React.PropTypes.func,
-		width: React.PropTypes.oneOfType([
-			React.PropTypes.oneOf(['small', 'medium', 'large']),
-			React.PropTypes.number,
-		]),
-	},
-	getDefaultProps () {
-		return {
-			width: 'medium',
-		};
-	},
-	componentWillReceiveProps: function(nextProps) {
+class Modal extends React.Component {
+	componentWillReceiveProps(nextProps) {
 		if (!canUseDOM) return;
 		if (!this.props.isOpen && nextProps.isOpen) {
 			// setTimeout(() => this.handleAccessibility());
@@ -55,7 +49,8 @@ module.exports = React.createClass({
 			// setTimeout(() => this.removeAccessibilityHandlers());
 			document.body.style.overflow = null;
 		}
-	},
+	}
+
 	/*
 	handleAccessibility () {
 		// Remember the element that was focused before we opened the modal
@@ -122,10 +117,11 @@ module.exports = React.createClass({
 		if (event.target.dataset.modal) this.handleClose();
 	},
 	*/
-	handleClose () {
+	handleClose = () => {
 		this.props.onCancel();
-	},
-	renderDialog() {
+	}
+
+	renderDialog = () => {
 		if (!this.props.isOpen) return;
 		let dialogClassname = classNames('Modal-dialog', (this.props.width && isNaN(this.props.width)) ? (
 			'Modal-dialog--' + this.props.width
@@ -137,16 +133,19 @@ module.exports = React.createClass({
 				</div>
 			</div>
 		);
-	},
-	renderBackdrop() {
+	}
+
+	renderBackdrop = () => {
 		if (!this.props.isOpen) return;
 		return <div className="Modal-backdrop" onClick={this.props.backdropClosesModal ? this.handleClose : null} />;
-	},
+	}
+
 	render() {
 		var className = classNames('Modal', {
 			'is-open': this.props.isOpen,
 		}, this.props.className);
 		var props = blacklist(this.props, 'backdropClosesModal', 'className', 'isOpen', 'onCancel');
+
 		return (
 			<div>
 				<TransitionPortal {...props} data-modal="true" className={className} /*onClick={this.handleModalClick}*/ transitionName="Modal-dialog" transitionEnterTimeout={260} transitionLeaveTimeout={140} component="div">
@@ -157,11 +156,28 @@ module.exports = React.createClass({
 				</TransitionPortal>
 			</div>
 		);
-	},
-});
+	}
+}
 
+Modal.propTypes = {
+	autoFocusFirstElement: PropTypes.bool,
+	backdropClosesModal: PropTypes.bool,
+	className: PropTypes.string,
+	isOpen: PropTypes.bool,
+	onCancel: PropTypes.func,
+	width: PropTypes.oneOfType([
+		PropTypes.oneOf(['small', 'medium', 'large']),
+		PropTypes.number,
+	])
+};
+	
+Modal.defaultProps = {
+	width: 'medium',
+};
 
 // expose the children to the top level export
-module.exports.Body = require('./ModalBody');
-module.exports.Footer = require('./ModalFooter');
-module.exports.Header = require('./ModalHeader');
+Modal.Body = ModalBody;
+Modal.Footer = ModalFooter;
+Modal.Header = ModalHeader;
+
+export default Modal;

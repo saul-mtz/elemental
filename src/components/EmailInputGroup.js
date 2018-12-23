@@ -1,42 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var classNames = require('classnames');
+const classNames = require('classnames');
 
-var REGEXP_EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const REGEXP_EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 function validateEmail (value) {
 	return REGEXP_EMAIL.test(value);
 }
 
-module.exports = React.createClass({
-	displayName: 'EmailInputGroup',
-	propTypes: {
-		alwaysValidate: React.PropTypes.bool,
-		className: React.PropTypes.string,
-		invalidMessage: React.PropTypes.string,
-		label: React.PropTypes.string,
-		onChange: React.PropTypes.func,
-		required: React.PropTypes.bool,
-		requiredMessage: React.PropTypes.string,
-		value: React.PropTypes.string,
-	},
-	getDefaultProps () {
-		return {
-			requiredMessage: 'Email address is required',
-			invalidMessage: 'Please enter a valid email address',
-		};
-	},
-	getInitialState () {
-		return {
-			isValid: true,
-			validationIsActive: this.props.alwaysValidate,
-		};
-	},
+class EmailInputGroup extends React.Component {
+	state = {
+		isValid: true,
+		validationIsActive: this.props.alwaysValidate,
+	};
+
 	componentDidMount () {
 		if (this.state.validationIsActive) {
 			this.validateInput(this.props.value);
 		}
-	},
+	}
+
 	componentWillReceiveProps (newProps) {
 		if (this.state.validationIsActive) {
 			if (newProps.value !== this.props.value && newProps.value !== this._lastChangeValue && !newProps.alwaysValidate) {
@@ -48,17 +32,20 @@ module.exports = React.createClass({
 			}
 			this.validateInput(newProps.value);
 		}
-	},
+	}
+
 	handleChange (e) {
 		this._lastChangeValue = e.target.value;
 		if (this.props.onChange) this.props.onChange(e);
-	},
+	}
+
 	handleBlur () {
 		if (!this.props.alwaysValidate) {
 			this.setState({ validationIsActive: false });
 		}
 		this.validateInput(this.props.value);
-	},
+	}
+
 	validateInput(value) {
 		var newState = {
 			isValid: true,
@@ -70,7 +57,8 @@ module.exports = React.createClass({
 			newState.validationIsActive = true;
 		}
 		this.setState(newState);
-	},
+	}
+
 	render () {
 		var validationMessage;
 		if (!this.state.isValid) {
@@ -93,5 +81,24 @@ module.exports = React.createClass({
 				{validationMessage}
 			</div>
 		);
-	},
-});
+	}
+}
+
+EmailInputGroup.propTypes = {
+	alwaysValidate: PropTypes.bool,
+	className: PropTypes.string,
+	invalidMessage: PropTypes.string,
+	label: PropTypes.string,
+	onChange: PropTypes.func,
+	required: PropTypes.bool,
+	requiredMessage: PropTypes.string,
+	value: PropTypes.string,
+};
+
+EmailInputGroup.defaultProps = {
+	requiredMessage: 'Email address is required',
+	invalidMessage: 'Please enter a valid email address',
+};
+
+export default EmailInputGroup;
+

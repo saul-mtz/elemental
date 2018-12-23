@@ -1,41 +1,23 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var blacklist = require('blacklist');
+import Button from './Button';
+import Spinner from './Spinner';
 
-var Button = require('./Button');
-var Spinner = require('./Spinner');
+const blacklist = require('blacklist');
 
-module.exports = React.createClass({
-	displayName: 'FileUpload',
-	propTypes: {
-		buttonLabelChange: React.PropTypes.string,
-		buttonLabelInitial: React.PropTypes.string,
-		disabled: React.PropTypes.bool,
-		file: React.PropTypes.object, // https://developer.mozilla.org/en/docs/Using_files_from_web_applications
-		onChange: React.PropTypes.func,
-	},
-	getDefaultProps () {
-		return {
-			buttonLabelInitial: 'Upload File',
-			buttonLabelChange:  'Change File',
-		};
-	},
-	getInitialState () {
-		return {
-			dataURI: null,
-			file: {},
-			loading: false,
-		};
-	},
-	componentDidMount () {
-		this.refs.fileInput.addEventListener('click', function () {
-			this.value = '';
-		}, false);
-	},
-	triggerFileBrowser () {
+class FileUpload extends React.Component {
+	state = {
+		dataURI: null,
+		file: {},
+		loading: false,
+	};
+
+	triggerFileBrowser = () => {
 		this.refs.fileInput.click();
-	},
-	handleChange (e) {
+	}
+
+	handleChange = (e) => {
 		var reader = new FileReader();
 		var file = e.target.files[0];
 
@@ -59,14 +41,22 @@ module.exports = React.createClass({
 				});
 			}
 		};
-	},
-	cancelUpload (e) {
+	}
+
+	cancelUpload = (e) => {
 		this.setState({
 			dataURI: null,
 			file: {},
 		});
 		this.props.onChange(e, null);
-	},
+	}
+
+	componentDidMount () {
+		this.refs.fileInput.addEventListener('click', function () {
+			this.value = '';
+		}, false);
+	}
+
 	render () {
 		let { dataURI, file } = this.state;
 		// props
@@ -103,5 +93,20 @@ module.exports = React.createClass({
 				<input style={{ display: 'none' }} type="file" ref="fileInput" onChange={this.handleChange} {...props} />
 			</div>
 		);
-	},
-});
+	}
+}
+
+FileUpload.propTypes = {
+	buttonLabelChange: PropTypes.string,
+	buttonLabelInitial: PropTypes.string,
+	disabled: PropTypes.bool,
+	file: PropTypes.object, // https://developer.mozilla.org/en/docs/Using_files_from_web_applications
+	onChange: PropTypes.func,
+}
+
+FileUpload.defaultProps = {
+	buttonLabelInitial: 'Upload File',
+	buttonLabelChange:  'Change File',
+};
+
+export default FileUpload;

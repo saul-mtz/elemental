@@ -1,37 +1,46 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var blacklist = require('blacklist');
-var classNames = require('classnames');
+const blacklist = require('blacklist');
+const classNames = require('classnames');
 
-module.exports = React.createClass({
-	displayName: 'RadioGroup',
-	propTypes: {
-		alwaysValidate: React.PropTypes.bool,
-		className: React.PropTypes.string,
-		inline: React.PropTypes.bool,
-		label: React.PropTypes.string,
-		onChange: React.PropTypes.func.isRequired,
-		options: React.PropTypes.array.isRequired,
-		required: React.PropTypes.bool,
-		requiredMessage: React.PropTypes.string,
-		value: React.PropTypes.string
-	},
-	getDefaultProps() {
-		return {
-			requiredMessage: 'This field is required'
+class RadioGroup extends React.Component {
+	state = {
+		isValid: true,
+		validationIsActive: this.props.alwaysValidate
+	};
+	
+	handleChange = (e) => {
+		this._lastChangeValue = e.target.value;
+		if (this.props.onChange) this.props.onChange(e.target.value);
+	}
+
+	handleBlur = () => {
+		if (!this.props.alwaysValidate) {
+			this.setState({ validationIsActive: false });
+		}
+		this.validateInput(this.props.value);
+	}
+
+	validateInput = (value) => {
+		var newState = {
+			isValid: true
 		};
-	},
-	getInitialState() {
-		return {
-			isValid: true,
-			validationIsActive: this.props.alwaysValidate
-		};
-	},
+		if (this.props.required && (!value || (value && !value.length))) {
+			newState.isValid = false;
+		}
+		if (!newState.isValid) {
+			newState.validationIsActive = true;
+		}
+		this.setState(newState);
+	}
+
 	componentDidMount() {
 		if (this.state.validationIsActive) {
 			this.validateInput(this.props.value);
 		}
-	},
+	}
+
 	componentWillReceiveProps(newProps) {
 		if (this.state.validationIsActive) {
 			if (newProps.value !== this.props.value && newProps.value !== this._lastChangeValue && !newProps.alwaysValidate) {
@@ -43,29 +52,8 @@ module.exports = React.createClass({
 			}
 			this.validateInput(newProps.value);
 		}
-	},
-	handleChange(e) {
-		this._lastChangeValue = e.target.value;
-		if (this.props.onChange) this.props.onChange(e.target.value);
-	},
-	handleBlur() {
-		if (!this.props.alwaysValidate) {
-			this.setState({ validationIsActive: false });
-		}
-		this.validateInput(this.props.value);
-	},
-	validateInput(value) {
-		var newState = {
-			isValid: true
-		};
-		if (this.props.required && (!value || (value && !value.length))) {
-			newState.isValid = false;
-		}
-		if (!newState.isValid) {
-			newState.validationIsActive = true;
-		}
-		this.setState(newState);
-	},
+	}
+	
 	render() {
 		var self = this;
 
@@ -109,4 +97,22 @@ module.exports = React.createClass({
 			</div>
 		);
 	}
-});
+}
+
+RadioGroup.propTypes = {
+	alwaysValidate: PropTypes.bool,
+	className: PropTypes.string,
+	inline: PropTypes.bool,
+	label: PropTypes.string,
+	onChange: PropTypes.func.isRequired,
+	options: PropTypes.array.isRequired,
+	required: PropTypes.bool,
+	requiredMessage: PropTypes.string,
+	value: PropTypes.string
+};
+
+RadioGroup.defaultProps = {
+	requiredMessage: 'This field is required'
+};
+
+export default RadioGroup;

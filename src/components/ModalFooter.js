@@ -1,15 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var classnames = require('classnames');
+const classNames = require('classnames');
 
-module.exports = React.createClass({
-	displayName: 'ModalFooter',
-	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string
-	},
-	render() {
-		var className = classnames('Modal__footer', this.props.className);
-		return <div {...this.props} className={className} />;
-	}
-});
+const ModalFooter = (props) => {
+	const className = classNames('Modal__footer', props.className);
+	return <div {...props} className={className} />;
+};
+
+ModalFooter.propTypes = {
+	children: PropTypes.element.isRequired,
+	className: PropTypes.string
+};
+	
+export default ModalFooter;

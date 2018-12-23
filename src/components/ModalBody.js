@@ -1,15 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var classnames = require('classnames');
+const classNames = require('classnames');
 
-module.exports = React.createClass({
-	displayName: 'ModalBody',
-	propTypes: {
-		children: React.PropTypes.node.isRequired,
-		className: React.PropTypes.string
-	},
-	render() {
-		var className = classnames('Modal__body', this.props.className);
-		return <div {...this.props} className={className} />;
-	}
-});
+const ModalBody = (props) => {
+	const className = classNames('Modal__body', props.className);
+	return <div {...props} className={className} />;
+};
+
+ModalBody.propTypes = {
+	children: PropTypes.node,
+	className: PropTypes.string
+};
+
+export default ModalBody;

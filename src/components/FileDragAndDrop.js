@@ -1,42 +1,31 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var classNames = require('classnames');
+const classNames = require('classnames');
 
 /*
 	Based on: https://github.com/paramaggarwal/react-dropzone
 */
+class FileDragAndDrop extends React.Component {
+	state = {
+		isDragActive: false,
+	};
 
-var Dropzone = React.createClass({
-	propTypes: {
-		className: React.PropTypes.string,
-		label: React.PropTypes.string,
-		labelActive: React.PropTypes.string,
-		onDrop: React.PropTypes.func.isRequired,
-	},
-	getDefaultProps () {
-		return {
-			label: 'Drag Files Here',
-			labelActive: 'Drop to Upload',
-		};
-	},
-	getInitialState () {
-		return {
-			isDragActive: false,
-		};
-	},
-	onDragLeave () {
+	onDragLeave = () => {
 		this.setState({
 			isDragActive: false,
 		});
-	},
-	onDragOver (e) {
+	}
+
+	onDragOver = (e) => {
 		e.preventDefault();
 		e.dataTransfer.dropEffect = 'copy';
 		this.setState({
 			isDragActive: true,
 		});
-	},
-	onDrop (e) {
+	}
+
+	onDrop = (e) => {
 		e.preventDefault();
 
 		this.setState({
@@ -54,10 +43,12 @@ var Dropzone = React.createClass({
 			files = Array.prototype.slice.call(files);
 			this.props.onDrop(files);
 		}
-	},
-	onClick () {
+	}
+
+	onClick = () => {
 		this.refs.fileInput.click();
-	},
+	}
+
 	render () {
 		let className = classNames('FileDragAndDrop', {
 			'active': this.state.isDragActive,
@@ -69,7 +60,19 @@ var Dropzone = React.createClass({
 				{this.props.children}
 			</button>
 		);
-	},
-});
+	}
+}
 
-module.exports = Dropzone;
+FileDragAndDrop.propTypes = {
+	className: PropTypes.string,
+	label: PropTypes.string,
+	labelActive: PropTypes.string,
+	onDrop: PropTypes.func.isRequired,
+};
+
+FileDragAndDrop.defaultProps = {
+	label: 'Drag Files Here',
+	labelActive: 'Drop to Upload',
+};
+
+export default FileDragAndDrop;

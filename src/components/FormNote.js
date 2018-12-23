@@ -1,9 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var blacklist = require('blacklist');
-var classNames = require('classnames');
+const classNames = require('classnames');
 
-var NOTE_TYPES = [
+const blacklist = require('blacklist');
+
+const NOTE_TYPES = [
 	'default',
 	'primary',
 	'success',
@@ -11,34 +13,33 @@ var NOTE_TYPES = [
 	'danger',
 ];
 
-module.exports = React.createClass({
-	displayName: 'FormNote',
-	propTypes: {
-		className: React.PropTypes.string,
-		note: React.PropTypes.string,
-		type: React.PropTypes.oneOf(NOTE_TYPES),
-	},
-	getDefaultProps () {
-		return {
-			type: 'default',
-		};
-	},
-	render () {
-		// classes
-		var componentClass = classNames(
-			'FormNote',
-			this.props.type ? ('FormNote--' + this.props.type) : null,
-			this.props.className
-		);
+const FormNote = (props) => {
+	// classes
+	const componentClass = classNames(
+		'FormNote',
+		props.type ? ('FormNote--' + props.type) : null,
+		props.className
+	);
 
-		// props
-		var props = blacklist(this.props, 'className', 'note', 'type');
+	// props
+	const componentProps = blacklist(props, 'className', 'note', 'type');
 
-		// allow users to pass through the note as an attribute or as children
-		return (
-			<div className={componentClass} dangerouslySetInnerHTML={this.props.note ? { __html: this.props.note } : null} {...props}>
-				{this.props.children}
-			</div>
-		);
-	},
-});
+	// allow users to pass through the note as an attribute or as children
+	return (
+		<div className={componentClass} dangerouslySetInnerHTML={props.note ? { __html: props.note } : null} {...componentProps}>
+			{props.children}
+		</div>
+	);
+};
+
+FormNote.propTypes = {
+	className: PropTypes.string,
+	note: PropTypes.string,
+	type: PropTypes.oneOf(NOTE_TYPES),
+};
+
+FormNote.defaultProps = {
+	type: 'default',
+};
+
+export default FormNote;

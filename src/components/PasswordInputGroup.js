@@ -1,42 +1,49 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var classNames = require('classnames');
+const classNames = require('classnames');
 
 function validatePassword(value) {
 	return value.length >= 8;
 }
 
-module.exports = React.createClass({
-	displayName: 'PasswordInputGroup',
-	propTypes: {
-		alwaysValidate: React.PropTypes.bool,
-		className: React.PropTypes.string,
-		invalidMessage: React.PropTypes.string,
-		label: React.PropTypes.string,
-		onChange: React.PropTypes.func,
-		required: React.PropTypes.bool,
-		requiredMessage: React.PropTypes.string,
-		validatePassword: React.PropTypes.func,
-		value: React.PropTypes.string,
-	},
-	getDefaultProps() {
-		return {
-			validatePassword,
-			requiredMessage: 'Password is required',
-			invalidMessage: 'Password must be at least 8 characters in length'
+class PasswordInputGroup extends React.Component {
+	state = {
+		isValid: true,
+		validationIsActive: this.props.alwaysValidate
+	};
+	
+	handleChange = (e) => {
+		this._lastChangeValue = e.target.value;
+		if (this.props.onChange) this.props.onChange(e);
+	}
+
+	handleBlur = () => {
+		if (!this.props.alwaysValidate) {
+			this.setState({ validationIsActive: false });
+		}
+		this.validateInput(this.props.value);
+	}
+
+	validateInput = (value) => {
+		var newState = {
+			isValid: true
 		};
-	},
-	getInitialState() {
-		return {
-			isValid: true,
-			validationIsActive: this.props.alwaysValidate
-		};
-	},
+		if ((value.length && !this.props.validatePassword(value)) || (!value.length && this.props.required)) {
+			newState.isValid = false;
+		}
+		if (!newState.isValid) {
+			newState.validationIsActive = true;
+		}
+		this.setState(newState);
+	}
+
 	componentDidMount() {
 		if (this.state.validationIsActive) {
 			this.validateInput(this.props.value);
 		}
-	},
+	}
+
 	componentWillReceiveProps(newProps) {
 		if (this.state.validationIsActive) {
 			if (newProps.value !== this.props.value && newProps.value !== this._lastChangeValue && !newProps.alwaysValidate) {
@@ -48,29 +55,8 @@ module.exports = React.createClass({
 			}
 			this.validateInput(newProps.value);
 		}
-	},
-	handleChange(e) {
-		this._lastChangeValue = e.target.value;
-		if (this.props.onChange) this.props.onChange(e);
-	},
-	handleBlur() {
-		if (!this.props.alwaysValidate) {
-			this.setState({ validationIsActive: false });
-		}
-		this.validateInput(this.props.value);
-	},
-	validateInput(value) {
-		var newState = {
-			isValid: true
-		};
-		if ((value.length && !this.props.validatePassword(value)) || (!value.length && this.props.required)) {
-			newState.isValid = false;
-		}
-		if (!newState.isValid) {
-			newState.validationIsActive = true;
-		}
-		this.setState(newState);
-	},
+	}
+
 	render() {
 		var validationMessage;
 		if (!this.state.isValid) {
@@ -94,4 +80,24 @@ module.exports = React.createClass({
 			</div>
 		);
 	}
-});
+}
+
+PasswordInputGroup.propTypes = {
+	alwaysValidate: PropTypes.bool,
+	className: PropTypes.string,
+	invalidMessage: PropTypes.string,
+	label: PropTypes.string,
+	onChange: PropTypes.func,
+	required: PropTypes.bool,
+	requiredMessage: PropTypes.string,
+	validatePassword: PropTypes.func,
+	value: PropTypes.string,
+};
+
+PasswordInputGroup.defaultProps = {
+	validatePassword,
+	requiredMessage: 'Password is required',
+	invalidMessage: 'Password must be at least 8 characters in length'
+};
+
+export default PasswordInputGroup;

@@ -6,25 +6,23 @@ import E from '../constants';
 const blacklist = require('blacklist');
 const classNames = require('classnames');
 
-class Row extends React.Component {
-	render () {
-		let { gutter } = this.props;
-		let rowStyle = {
-			display: 'flex',
-			flexWrap: 'wrap',
-			msFlexWrap: 'wrap',
-			WebkitFlexWrap: 'wrap',
-			marginLeft: (gutter / -2),
-			marginRight: (gutter / -2),
-		};
-		let className = classNames('Row', this.props.className);
-		let props = blacklist(this.props, 'className', 'gutter', 'style');
+const Row = (props) => {
+	let { gutter } = props;
+	let rowStyle = {
+		display: 'flex',
+		flexWrap: 'wrap',
+		msFlexWrap: 'wrap',
+		WebkitFlexWrap: 'wrap',
+		marginLeft: (gutter / -2),
+		marginRight: (gutter / -2),
+	};
+	let className = classNames('Row', props.className);
+	let componentProps = blacklist(props, 'className', 'gutter', 'style');
 
-		return (
-			<div {...props} style={Object.assign(rowStyle, this.props.style)} className={className} />
-		);
-	}
-}
+	return (
+		<div {...componentProps} style={Object.assign(rowStyle, props.style)} className={className} />
+	);
+};
 
 Row.propTypes = {
 	children: PropTypes.node.isRequired,

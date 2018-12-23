@@ -1,22 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-var classNames = require('classnames');
-var blacklist = require('blacklist');
+const classNames = require('classnames');
+const blacklist = require('blacklist');
 
-class InputGroupSection extends React.Component {
-	render() {
-		// classes
-		var className = classNames('InputGroup_section', {
-			'InputGroup_section--grow': this.props.grow
-		}, this.props.className);
-		var props = blacklist(this.props, 'grow');
+const InputGroupSection = (props) => {
+	// classes
+	const className = classNames('InputGroup_section', {
+		'InputGroup_section--grow': props.grow
+	}, props.className);
+	const componentProps = blacklist(props, 'grow');
 
-		return (
-			<div {...props} className={className} />
-		);
-	}
-}
+	return <div {...componentProps} className={className} />;
+};
 
 InputGroupSection.propTypes = {
 	className: PropTypes.string,

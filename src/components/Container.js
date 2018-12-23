@@ -1,7 +1,8 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import theme from '../constants';
 
-function Container ({ children, clearfix, gutter, maxWidth, style, ...props }) {
+const Container = ({ children, clearfix, gutter, maxWidth, style, ...props }) => {
 	const styles = {
 		clearfix: {
 			clear: 'both',
@@ -15,13 +16,14 @@ function Container ({ children, clearfix, gutter, maxWidth, style, ...props }) {
 			paddingRight: gutter,
 		},
 	};
-	props.style = {
+
+	const newStyle = {
 		...styles.container,
 		...style,
 	};
 
 	return (
-		<div {...props}>
+		<div {...props} style={newStyle}>
 			{clearfix && <span style={styles.clearfix} />}
 			{children}
 			{clearfix && <span style={styles.clearfix} />}
@@ -34,9 +36,10 @@ Container.propTypes = {
 	gutter: PropTypes.number,
 	maxWidth: PropTypes.number,
 };
+
 Container.defaultProps = {
 	gutter: theme.width.gutter,
 	maxWidth: theme.width.container,
 };
 
-module.exports = Container;
+export default Container;
